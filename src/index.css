@@ -1,0 +1,206 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+@custom-variant dark (&:is(.dark *));
+
+/* ------------------------------------------------------------------ */
+/* Design tokens                                                       */
+/* Edit these to retheme the whole site.                               */
+/* ------------------------------------------------------------------ */
+@theme inline {
+  --font-heading: "IBM Plex Serif", "Georgia", serif;
+  --font-sans: "Nunito", "Segoe UI", system-ui, sans-serif;
+  --font-cjk: "Noto Sans SC", "Nunito", sans-serif;
+
+  /* Site palette */
+  --color-forest: var(--forest);
+  --color-forest-deep: var(--forest-deep);
+  --color-moss: var(--moss);
+  --color-leaf: var(--leaf);
+  --color-cream: var(--cream);
+  --color-paper: var(--paper);
+  --color-ink: var(--ink);
+  --color-blush: var(--blush);
+
+  /* shadcn semantic tokens */
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --color-foreground: var(--foreground);
+  --color-background: var(--background);
+
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
+
+  /* Chunky offset shadow used on outlined components */
+  --shadow-offset: 3px 3px 0 0 var(--ink);
+  --shadow-offset-lg: 5px 5px 0 0 var(--ink);
+  --shadow-offset-forest: 3px 3px 0 0 var(--forest);
+}
+
+:root {
+  /* Base palette */
+  --cream: #faf7f0;        /* page background: warm off-white */
+  --paper: #fffdf8;        /* card surface: slightly lighter */
+  --ink: #1a1a1a;          /* near-black for text & outlines */
+  --forest: #2f5d3a;       /* accent: forest green */
+  --forest-deep: #224530;  /* hover / pressed */
+  --moss: #dfe9dc;         /* tinted background for chips, hovers */
+  --leaf: #5a9a5c;         /* lighter green for flat leaf artwork */
+  --blush: #f3dcd4;        /* tiny warm accent for decorative touches */
+
+  /* shadcn semantic mapping */
+  --background: var(--cream);
+  --foreground: var(--ink);
+  --card: var(--paper);
+  --card-foreground: var(--ink);
+  --popover: var(--paper);
+  --popover-foreground: var(--ink);
+  --primary: var(--forest);
+  --primary-foreground: var(--cream);
+  --secondary: var(--moss);
+  --secondary-foreground: var(--forest-deep);
+  --muted: #efeae0;
+  --muted-foreground: #5c5a54;
+  --accent: var(--moss);
+  --accent-foreground: var(--forest-deep);
+  --destructive: #b3412f;
+  --border: var(--ink);
+  --input: var(--ink);
+  --ring: var(--forest);
+  --radius: 0.75rem;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  html {
+    @apply font-sans;
+    scroll-behavior: smooth;
+    /* Decorations are positioned off the edge of the page; never let them add a sideways scroll */
+    overflow-x: clip;
+  }
+  body {
+    @apply bg-background text-foreground antialiased dotted;
+  }
+  h1, h2, h3, h4 {
+    @apply font-heading;
+  }
+  button:not(:disabled), [role="button"]:not(:disabled) {
+    cursor: pointer;
+  }
+  ::selection {
+    background: var(--moss);
+    color: var(--forest-deep);
+  }
+}
+
+/* ------------------------------------------------------------------ */
+/* Custom utilities                                                    */
+/* ------------------------------------------------------------------ */
+
+/* Faint dot grid that gives the off-white some paper texture.
+   Applied to the body and to the sticky nav so the dots run through it. */
+@utility dotted {
+  background-color: var(--cream);
+  background-image: radial-gradient(
+    color-mix(in oklch, var(--ink) 12%, transparent) 1px,
+    transparent 1px
+  );
+  background-size: 22px 22px;
+}
+
+/* The signature look: medium black outline + offset shadow */
+@utility outlined {
+  border: 2px solid var(--ink);
+  border-radius: var(--radius-xl);
+  background: var(--paper);
+  box-shadow: var(--shadow-offset);
+}
+
+@utility outlined-sm {
+  border: 2px solid var(--ink);
+  border-radius: var(--radius-lg);
+  background: var(--paper);
+  box-shadow: 2px 2px 0 0 var(--ink);
+}
+
+/* Lift on hover, used with `outlined` */
+@utility lift {
+  transition: transform 150ms ease, box-shadow 150ms ease;
+  &:hover {
+    transform: translate(-1px, -1px);
+    box-shadow: var(--shadow-offset-lg);
+  }
+  &:active {
+    transform: translate(1px, 1px);
+    box-shadow: 1px 1px 0 0 var(--ink);
+  }
+}
+
+/* Green highlighter behind a word in a heading */
+@utility highlight {
+  background: linear-gradient(transparent 55%, var(--moss) 55%);
+  padding: 0 0.15em;
+}
+
+/* Wug walking in place: legs swing in opposite phase, body bobs with each step */
+@keyframes wug-leg-a {
+  0%, 100% { transform: rotate(22deg); }
+  50%      { transform: rotate(-22deg); }
+}
+@keyframes wug-leg-b {
+  0%, 100% { transform: rotate(-22deg); }
+  50%      { transform: rotate(22deg); }
+}
+@keyframes wug-bob {
+  0%, 50%, 100% { transform: translateY(0); }
+  25%, 75%      { transform: translateY(-1.5px); }
+}
+.wug-leg-a { animation: wug-leg-a 0.9s ease-in-out infinite; }
+.wug-leg-b { animation: wug-leg-b 0.9s ease-in-out infinite; }
+.wug-body  { animation: wug-bob 0.9s ease-in-out infinite; }
+@media (prefers-reduced-motion: reduce) {
+  .wug-leg-a, .wug-leg-b, .wug-body { animation: none; }
+}
+
+/* Gentle sway for hanging decorations (leaves, vines) */
+@keyframes sway {
+  0%, 100% { transform: rotate(-3.4deg); }
+  50%      { transform: rotate(3.4deg); }
+}
+@utility sway {
+  transform-origin: top center;
+  animation: sway 4.9s ease-in-out infinite;
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+  }
+}
+
+/* Same motion for foliage rooted in a corner (set transform-origin on the element), a bit slower */
+@utility sway-rooted {
+  animation: sway 6.5s ease-in-out infinite;
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+  }
+}
