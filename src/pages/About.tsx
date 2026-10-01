@@ -15,14 +15,8 @@ export function About() {
           <img
             src={asset(profile.photo)}
             alt={`Portrait of ${profile.name}`}
-            className="aspect-square w-[6.3rem] rounded-full border-2 border-ink bg-paper object-cover sm:w-[7.7rem] md:w-[8.4rem]"
+            className="aspect-square w-40 rounded-full bg-paper object-cover sm:w-48 md:w-56"
           />
-          <span
-            aria-hidden
-            className="absolute -top-1 -right-3 rounded-full border-2 border-ink bg-leaf px-3.5 py-1 font-cjk text-xl leading-none font-medium text-cream"
-          >
-            嗨!
-          </span>
         </div>
 
         <a
